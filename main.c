@@ -1,5 +1,6 @@
 #include "lvgl/lvgl.h"
 #include "lv_drivers/display/fbdev.h"
+#include "lv_drivers/indev/evdev.h"
 #include "lv_demos/lv_demo.h"
 #include <unistd.h>
 #include <pthread.h>
@@ -28,9 +29,17 @@ int main(void)
     lv_disp_drv_init(&disp_drv);
     disp_drv.draw_buf   = &disp_buf;
     disp_drv.flush_cb   = fbdev_flush;
-    disp_drv.hor_res    = 800;
-    disp_drv.ver_res    = 480;
+    disp_drv.hor_res    = 1280;
+    disp_drv.ver_res    = 400;
     lv_disp_drv_register(&disp_drv);
+
+    /*Initialize and register the touch driver*/
+    evdev_init();
+    lv_indev_drv_t indev_drv;
+    lv_indev_drv_init(&indev_drv);
+    indev_drv.type = LV_INDEV_TYPE_POINTER;
+    indev_drv.read_cb = evdev_read;
+    lv_indev_drv_register(&indev_drv);
 
     /*Create a Demo*/
     lv_demo_widgets();
