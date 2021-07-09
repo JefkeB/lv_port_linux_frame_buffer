@@ -7,7 +7,7 @@
 #include <time.h>
 #include <sys/time.h>
 
-#define DISP_BUF_SIZE (128 * 1024)
+#define DISP_BUF_SIZE (10 * 1024)
 
 int main(void)
 {
@@ -38,11 +38,12 @@ int main(void)
     lv_indev_drv_t indev_drv;
     lv_indev_drv_init(&indev_drv);
     indev_drv.type = LV_INDEV_TYPE_POINTER;
-    indev_drv.read_cb = evdev_read;
+    indev_drv.read_cb = (void*)evdev_read;
     lv_indev_drv_register(&indev_drv);
 
     /*Create a Demo*/
-    lv_demo_widgets();
+    //lv_demo_widgets();
+    lv_demo_music();
 
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) {
